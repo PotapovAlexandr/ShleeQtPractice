@@ -21,8 +21,7 @@ Project {
             //"QT_DISABLE_DEPRECATED_BEFORE=0x060000" // disables all the APIs deprecated before Qt 6.0.0
         ]
 
-        consoleApplication: true
-        files: "main.cpp"
+        files: ['main.cpp', 'MainWindow.h', 'Worker.h']
 
         Group {     // Properties for the produced executable
             fileTagsFilter: "application"
