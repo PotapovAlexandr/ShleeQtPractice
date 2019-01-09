@@ -11,7 +11,6 @@ namespace
     int s_fiftyMillions = s_million * 50;
 }
 
-
 class MainWindow: public QMainWindow
 {
     Q_OBJECT
@@ -37,6 +36,7 @@ signals:
 public slots:
     void OnAddTaskPush()
     {
+        qDebug() << "worker started";
         QThread* thread = new QThread();
 
         int target = (std::rand()*std::rand())%s_fiftyMillions + s_million; // rand 1-50 kkk. 1-10kkk work so quickly.
@@ -54,7 +54,13 @@ public slots:
         connect(worker, &Worker::ReturnResult,
                 this, &MainWindow::OnResultReturned);
         connect(worker, &Worker::Finished,
-                thread, &QThread::terminate);
+                thread, &QThread::quit);
+
+        connect(worker, &Worker::Finished,
+                worker, &Worker::deleteLater);
+
+        connect(thread, &QThread::finished,
+                thread, &QThread::deleteLater);
 
 
 
