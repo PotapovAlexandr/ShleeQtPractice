@@ -5,6 +5,8 @@
 #include "Worker.h"
 #include <ctime>
 
+#include "ui_m_form.h"
+
 namespace
 {
     int s_million = 1000000;
@@ -98,37 +100,14 @@ public slots:
 private:
     void SetGui()
     {
-        this->resize(300, 400);
+        m_ui.setupUi(this);
+        m_lblThreadCounter = m_ui.labelActiveThreads;
 
-        QWidget* wgt = new QWidget(this);
+        m_ui.listView->setModel(m_model);
 
-        QPushButton* button = new QPushButton("Add task", wgt);
-        connect(button, &QPushButton::pressed, this, &MainWindow::OnAddTaskPush);
+        connect(m_ui.buttonAddTask, &QPushButton::pressed, this, &MainWindow::OnAddTaskPush);
+        connect(m_ui.buttonStopAllThreads, &QPushButton::pressed, this, &MainWindow::OnStopAllTask);
 
-        QListView* listView = new QListView(wgt);
-        listView->setModel(m_model);
-
-        QHBoxLayout* layout = new QHBoxLayout(wgt);
-
-        QVBoxLayout* rightLayout = new QVBoxLayout(wgt);
-        rightLayout->setAlignment(Qt::AlignTop);
-
-        m_lblThreadCounter = new QLabel(wgt);
-        SetCounterLabelText();
-
-        QPushButton* stopAllThreads = new QPushButton("Stop All Threads", wgt);
-        connect(stopAllThreads, &QPushButton::pressed, this, &MainWindow::OnStopAllTask);
-
-        rightLayout->addWidget(button);
-        rightLayout->addWidget(m_lblThreadCounter);
-        rightLayout->addWidget(stopAllThreads);
-
-        layout->addWidget(listView);
-        layout->addLayout(rightLayout);
-
-        wgt->setLayout(layout);
-
-        this->setCentralWidget(wgt);
     }
     void SetCounterLabelText()
     {
@@ -136,6 +115,7 @@ private:
     }
 
 private:
+    Ui_MainWindow m_ui;
     QStringListModel* m_model;
     QLabel* m_lblThreadCounter;
     int m_threadCounter;
