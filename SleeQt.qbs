@@ -1,10 +1,12 @@
 import qbs
 
 Project {
+    name: "ImagePost"
     minimumQbsVersion: "1.7.1"
 
     CppApplication {
-        Depends {name : "Qt"; submodules : ['core', 'gui', 'svg', 'widgets']}
+        name: "Recipient"
+        Depends {name : "Qt"; submodules : ['core', 'gui', 'svg', 'widgets', 'network']}
 
         cpp.cxxLanguageVersion: "c++11"
 
@@ -21,11 +23,21 @@ Project {
             //"QT_DISABLE_DEPRECATED_BEFORE=0x060000" // disables all the APIs deprecated before Qt 6.0.0
         ]
 
-        files: ['main.cpp', 'MainWindow.h', 'Worker.h', 'm_form.ui']
+        files: ['main.cpp', 'MainWindow.h', 'm_form.ui', 'Receiver.h']
 
         Group {     // Properties for the produced executable
             fileTagsFilter: "application"
             qbs.install: true
         }
+    }
+    CppApplication {
+        name: "Sender"
+        Depends {name : "Qt"; submodules : ['core', 'gui', 'svg', 'widgets', 'network']}
+        files: [
+            "Sender.h",
+            "SenderMain.cpp",
+        ]
+        consoleApplication: true
+        qbs.install: true
     }
 }
